@@ -7,7 +7,8 @@ the Newmark-Beta method
 
 import numpy as np
 from math import sqrt
-from scipy.integrate import cumtrapz
+#from scipy.integrate import cumtrapz
+from scipy.integrate import cumulative_trapezoid
 import matplotlib.pyplot as plt
 from sm_utils import (_save_image,
                       get_time_vector,
