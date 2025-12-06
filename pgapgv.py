@@ -47,6 +47,7 @@ plt.savefig('ALLPSD.jpg', format='jpeg', dpi=400)
 	
 ################################
 
+
 acc = tr.data          # acceleration record
 dt  = tr.stats.delta   # sampling interval
 
@@ -57,11 +58,12 @@ balh = plot_response_spectra(
     filename="Spec" + tr.stats.station + tr.stats.channel +
              tr.stats.starttime.formatIRISWebService() + ".png"
 )
+
 ##############################
 
 
 
-#balh=plot_response_spectra(spec,filename='Spec' + tr.stats.station + tr.stats.channel + tr.stats.starttime.formatIRISWebService() + ".png")
+balh=plot_response_spectra(spec,filename='Spec' + tr.stats.station + tr.stats.channel + tr.stats.starttime.formatIRISWebService() + ".png")
 balh=plot_time_series(ts['Acceleration'],1/tr.stats.sampling_rate,velocity=ts['Velocity'],displacement=ts['Displacement'],filename='TS' + tr.stats.station + \
     tr.stats.channel + tr.stats.starttime.formatIRISWebService() + ".png")
 
