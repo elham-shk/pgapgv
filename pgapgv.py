@@ -40,20 +40,20 @@ for idx, tr in enumerate(st):
 	plt.ylabel('Acceleration (g)', fontsize=18)
 	plt.title('QCN Pseudo-Acceleration Response Spectra', fontsize=18)
 	plt.tick_params(labelsize=18)
-
-    plot_time_series(
+	plot_time_series(
         ts["Acceleration"],
         1/tr.stats.sampling_rate,
         velocity=ts["Velocity"],
         displacement=ts["Displacement"],
         filename=f"TS_{tr.stats.station}_{tr.stats.channel}.png"
     )
+	
 
 
 	
-#plt.savefig(filename='ALLPSD.jpg',format='jpeg',dpi=400)
-plt.savefig('ALLPSD.jpg', format='jpeg', dpi=400)
-#plt.show()
+# #plt.savefig(filename='ALLPSD.jpg',format='jpeg',dpi=400)
+# plt.savefig('ALLPSD.jpg', format='jpeg', dpi=400)
+# #plt.show()
 	
 
 ###########################
