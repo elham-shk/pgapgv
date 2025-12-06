@@ -5,7 +5,8 @@ Strong motion utilities
 """
 import os
 import numpy as np
-from scipy.integrate import cumtrapz
+#from scipy.integrate import cumtrapz
+from scipy.integrate import cumulative_trapezoid
 import matplotlib.pyplot as plt
 
 def get_time_vector(time_step, number_steps):
