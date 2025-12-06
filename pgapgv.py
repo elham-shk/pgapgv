@@ -59,6 +59,19 @@ plt.savefig('ALLPSD.jpg', format='jpeg', dpi=400)
 #              tr.stats.starttime.formatIRISWebService() + ".png"
 # )
 
+###########################
+tr = st[0]                # pick first (and only) trace
+acc = tr.data             # acceleration record
+dt  = tr.stats.delta      # sampling interval
+
+# Compute spectrum
+spec = ResponseSpectrum(acc, dt)
+balh = plot_response_spectra(
+    spec,
+    filename="Spec" + tr.stats.station + tr.stats.channel +
+             tr.stats.starttime.formatIRISWebService() + ".png"
+)
+
 ##############################
 
 
