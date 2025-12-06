@@ -40,45 +40,42 @@ for idx, tr in enumerate(st):
 	plt.ylabel('Acceleration (g)', fontsize=18)
 	plt.title('QCN Pseudo-Acceleration Response Spectra', fontsize=18)
 	plt.tick_params(labelsize=18)
+
+    plot_time_series(
+        ts["Acceleration"],
+        1/tr.stats.sampling_rate,
+        velocity=ts["Velocity"],
+        displacement=ts["Displacement"],
+        filename=f"TS_{tr.stats.station}_{tr.stats.channel}.png"
+    )
+
+
 	
 #plt.savefig(filename='ALLPSD.jpg',format='jpeg',dpi=400)
 plt.savefig('ALLPSD.jpg', format='jpeg', dpi=400)
 #plt.show()
 	
-################################
 
+###########################
+# tr = st[0]                # pick first (and only) trace
+# acc = tr.data             # acceleration record
+# dt  = tr.stats.delta      # sampling interval
 
-# acc = tr.data          # acceleration record
-# dt  = tr.stats.delta   # sampling interval
-
-# spec = ResponseSpectrum(acc, dt)   # <-- create spectrum object
-
+# # Compute spectrum
+# spec = ResponseSpectrum(acc, dt)
 # balh = plot_response_spectra(
 #     spec,
 #     filename="Spec" + tr.stats.station + tr.stats.channel +
 #              tr.stats.starttime.formatIRISWebService() + ".png"
 # )
 
-###########################
-tr = st[0]                # pick first (and only) trace
-acc = tr.data             # acceleration record
-dt  = tr.stats.delta      # sampling interval
-
-# Compute spectrum
-spec = ResponseSpectrum(acc, dt)
-balh = plot_response_spectra(
-    spec,
-    filename="Spec" + tr.stats.station + tr.stats.channel +
-             tr.stats.starttime.formatIRISWebService() + ".png"
-)
-
 ##############################
 
 
 
-#balh=plot_response_spectra(spec,filename='Spec' + tr.stats.station + tr.stats.channel + tr.stats.starttime.formatIRISWebService() + ".png")
-balh=plot_time_series(ts['Acceleration'],1/tr.stats.sampling_rate,velocity=ts['Velocity'],displacement=ts['Displacement'],filename='TS' + tr.stats.station + \
-    tr.stats.channel + tr.stats.starttime.formatIRISWebService() + ".png")
+# #balh=plot_response_spectra(spec,filename='Spec' + tr.stats.station + tr.stats.channel + tr.stats.starttime.formatIRISWebService() + ".png")
+# balh=plot_time_series(ts['Acceleration'],1/tr.stats.sampling_rate,velocity=ts['Velocity'],displacement=ts['Displacement'],filename='TS' + tr.stats.station + \
+#     tr.stats.channel + tr.stats.starttime.formatIRISWebService() + ".png")
 
 		
 
