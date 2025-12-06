@@ -45,7 +45,19 @@ for idx, tr in enumerate(st):
 plt.savefig('ALLPSD.jpg', format='jpeg', dpi=400)
 #plt.show()
 	
-	
+################################
+acc = tr.data
+dt = tr.stats.delta
+periods = np.logspace(-1, 1, 50)
+
+spec = ResponseSpectrum(acc, dt, periods)
+
+balh = plot_response_spectra(
+    spec,
+    filename='Spec' + tr.stats.station + tr.stats.channel +
+             tr.stats.starttime.formatIRISWebService() + ".png"
+)
+##############################
 
 
 
