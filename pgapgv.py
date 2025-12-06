@@ -46,16 +46,16 @@ plt.savefig('ALLPSD.jpg', format='jpeg', dpi=400)
 #plt.show()
 	
 ################################
-acc = tr.data                     # acceleration record
-dt = tr.stats.delta               # sampling interval
 
-# Compute spectrum
-spec = ResponseSpectrum(acc, dt)
+acc = tr.data          # acceleration record
+dt  = tr.stats.delta   # sampling interval
 
-# Plot and save
+spec = ResponseSpectrum(acc, dt)   # <-- create spectrum object
+
 balh = plot_response_spectra(
     spec,
-    filename="Spec" + tr.stats.station + tr.stats.channel + tr.stats.starttime.formatIRISWebService() + ".png"
+    filename="Spec" + tr.stats.station + tr.stats.channel +
+             tr.stats.starttime.formatIRISWebService() + ".png"
 )
 ##############################
 
