@@ -41,7 +41,8 @@ for idx, tr in enumerate(st):
 	plt.title('QCN Pseudo-Acceleration Response Spectra', fontsize=18)
 	plt.tick_params(labelsize=18)
 	
-plt.savefig(filename='ALLPSD.jpg',format='jpeg',dpi=400)
+#plt.savefig(filename='ALLPSD.jpg',format='jpeg',dpi=400)
+plt.savefig('ALLPSD.jpg', format='jpeg', dpi=400)
 #plt.show()
 	
 	
