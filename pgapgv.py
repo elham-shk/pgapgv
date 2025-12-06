@@ -1,86 +1,63 @@
 #!/usr/bin/env python
-from obspy.core import read, Stream, UTCDateTime
+from obspy.core import read, Stream
 import glob
 import numpy as np
 import matplotlib.pyplot as plt
-import sys
-#from obspy.signal.trigger import zDetect, plotTrigger
 from obspy.signal.trigger import z_detect
 from response_spectrum import ResponseSpectrum, NigamJennings, plot_response_spectra, plot_time_series
 import sm_utils
 
 
-#Need to add comments to this code
+def run_pgapgv(data_pattern="data/*"):
+    """Process all files matching data_pattern and make spectra + time-series plots."""
+    files = glob.glob(data_pattern)
 
-debug = True
+    st = Stream()
+    for curfile in files:
+        st += read(curfile)
 
-files = glob.glob('data/*')
+    st._cleanup()
+    st.sort(['network', 'station', 'channel', 'starttime'])
 
-st = Stream()
-for curfile in files:
-	st+=read(curfile)
+    pers = np.linspace(0.01, 20, 300)
 
-#Make everything overlap and nice
-st._cleanup()
-st.sort(['network','station','channel','starttime'])
+    for idx, tr in enumerate(st):
+        tr.detrend('demean')
+        tr.taper(max_percentage=0.05, type='cosine')
+        tr.filter('highpass', freq=1.0)
 
+        rs = NigamJennings(
+            tr.data,
+            1 / tr.stats.sampling_rate,
+            pers,
+            damping=0.5,
+            units="m/s/s",
+        )
+        spec, ts, acc, vel, dis = rs.evaluate()
 
-pers = np.linspace(0.01, 20, 300)
-for idx, tr in enumerate(st):
-	tr.detrend('demean')
-	tr.taper(max_percentage=0.05, type='cosine')
-	tr.data = tr.data
-	tr.filter('highpass',freq=1.0)
-	rs = NigamJennings(tr.data,1/tr.stats.sampling_rate,pers,damping=0.5, units="m/s/s")
-	spec, ts, acc, vel, dis = rs.evaluate()
-	fig = plt.figure(1, figsize=(8,8))
-	plt.loglog(spec["Period"],spec["Pseudo-Acceleration"]*0.1/9.81,'k',linewidth=2)
-	plt.xlim([.1, 10])
-	plt.xlabel('Period (s)', fontsize=18)
-	plt.ylabel('Acceleration (g)', fontsize=18)
-	plt.title('QCN Pseudo-Acceleration Response Spectra', fontsize=18)
-	plt.tick_params(labelsize=18)
-	plot_time_series(
-        ts["Acceleration"],
-        1/tr.stats.sampling_rate,
-        velocity=ts["Velocity"],
-        displacement=ts["Displacement"],
-        filename=f"TS_{tr.stats.station}_{tr.stats.channel}.png"
-    )
-	
+        # Response spectrum plot (saved to PNG)
+        plt.figure(figsize=(8, 8))
+        plt.loglog(spec["Period"], spec["Pseudo-Acceleration"] * 0.1 / 9.81,
+                   'k', linewidth=2)
+        plt.xlim([0.1, 10])
+        plt.xlabel('Period (s)', fontsize=18)
+        plt.ylabel('Acceleration (g)', fontsize=18)
+        plt.title('QCN Pseudo-Acceleration Response Spectra', fontsize=18)
+        plt.tick_params(labelsize=18)
+        spec_name = f"Spec_{tr.stats.station}_{tr.stats.channel}.png"
+        plt.savefig(spec_name, dpi=400)
+        plt.close()
 
-
-	
-# #plt.savefig(filename='ALLPSD.jpg',format='jpeg',dpi=400)
-# plt.savefig('ALLPSD.jpg', format='jpeg', dpi=400)
-# #plt.show()
-	
-
-###########################
-# tr = st[0]                # pick first (and only) trace
-# acc = tr.data             # acceleration record
-# dt  = tr.stats.delta      # sampling interval
-
-# # Compute spectrum
-# spec = ResponseSpectrum(acc, dt)
-# balh = plot_response_spectra(
-#     spec,
-#     filename="Spec" + tr.stats.station + tr.stats.channel +
-#              tr.stats.starttime.formatIRISWebService() + ".png"
-# )
-
-##############################
+        # Time-series plot (uses provided helper)
+        ts_name = f"TS_{tr.stats.station}_{tr.stats.channel}.png"
+        plot_time_series(
+            ts["Acceleration"],
+            1 / tr.stats.sampling_rate,
+            velocity=ts["Velocity"],
+            displacement=ts["Displacement"],
+            filename=ts_name,
+        )
 
 
-
-# #balh=plot_response_spectra(spec,filename='Spec' + tr.stats.station + tr.stats.channel + tr.stats.starttime.formatIRISWebService() + ".png")
-# balh=plot_time_series(ts['Acceleration'],1/tr.stats.sampling_rate,velocity=ts['Velocity'],displacement=ts['Displacement'],filename='TS' + tr.stats.station + \
-#     tr.stats.channel + tr.stats.starttime.formatIRISWebService() + ".png")
-
-		
-
-
-
-
-
-
+if __name__ == "__main__":
+    run_pgapgv()
