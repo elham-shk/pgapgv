@@ -4,7 +4,8 @@ import glob
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
-from obspy.signal.trigger import zDetect, plotTrigger
+#from obspy.signal.trigger import zDetect, plotTrigger
+from obspy.signal.trigger import z_detect
 from response_spectrum import ResponseSpectrum, NigamJennings, plot_response_spectra, plot_time_series
 import sm_utils
 
