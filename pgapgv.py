@@ -46,22 +46,22 @@ plt.savefig('ALLPSD.jpg', format='jpeg', dpi=400)
 #plt.show()
 	
 ################################
-acc = tr.data
-dt = tr.stats.delta
-periods = np.logspace(-1, 1, 50)
+acc = tr.data                     # acceleration record
+dt = tr.stats.delta               # sampling interval
 
-spec = ResponseSpectrum(acc, dt, periods)
+# Compute spectrum
+spec = ResponseSpectrum(acc, dt)
 
+# Plot and save
 balh = plot_response_spectra(
     spec,
-    filename='Spec' + tr.stats.station + tr.stats.channel +
-             tr.stats.starttime.formatIRISWebService() + ".png"
+    filename="Spec" + tr.stats.station + tr.stats.channel + tr.stats.starttime.formatIRISWebService() + ".png"
 )
 ##############################
 
 
 
-balh=plot_response_spectra(spec,filename='Spec' + tr.stats.station + tr.stats.channel + tr.stats.starttime.formatIRISWebService() + ".png")
+#balh=plot_response_spectra(spec,filename='Spec' + tr.stats.station + tr.stats.channel + tr.stats.starttime.formatIRISWebService() + ".png")
 balh=plot_time_series(ts['Acceleration'],1/tr.stats.sampling_rate,velocity=ts['Velocity'],displacement=ts['Displacement'],filename='TS' + tr.stats.station + \
     tr.stats.channel + tr.stats.starttime.formatIRISWebService() + ".png")
 
